@@ -115,6 +115,14 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .reemb .av{margin:0;width:34px;height:34px;border:0}
 .reemb .n{flex:1;font-weight:500}
 .reemb .n small{display:block;font-weight:400;font-size:.72rem;color:var(--muted)}
+.tx-wrap + .tx,.tx + .tx-wrap,.tx-wrap + .tx-wrap{border-top:1px solid var(--line)}
+.tx-wrap summary{list-style:none;cursor:pointer}
+.tx-wrap summary::-webkit-details-marker{display:none}
+.tx-wrap[open] .chev{transform:rotate(180deg)}
+.items{margin:0 0 10px 54px;padding:4px 12px;border-radius:14px;background:var(--surface-2)}
+.item > span{white-space:nowrap}
+.item{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;font-size:.85rem}
+.item + .item{border-top:1px solid var(--line)}
 .empty{text-align:center;padding:26px 8px 10px;color:var(--muted);font-size:.88rem}
 .empty .ic{margin:0 auto 12px;background:var(--surface-2);color:var(--accent)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -226,7 +234,7 @@ function render(d){
   const by={};g.forEach(x=>by[key(x.categoria)]=(by[key(x.categoria)]||0)+Number(x.valor));
   const cats=Object.entries(by).sort((a,b)=>b[1]-a[1]);
   $("catSec").hidden=!cats.length;
-  const pend={};g.filter(x=>x.pagoPor&&!x.reembolsado).forEach(x=>{(pend[x.pagoPor]=pend[x.pagoPor]||{v:0,n:0});pend[x.pagoPor].v+=Number(x.valor);pend[x.pagoPor].n++});
+  const pend={};g.flatMap(x=>x.itens?x.itens:[x]).filter(x=>x.pagoPor&&!x.reembolsado).forEach(x=>{(pend[x.pagoPor]=pend[x.pagoPor]||{v:0,n:0});pend[x.pagoPor].v+=Number(x.valor);pend[x.pagoPor].n++});
   const pl=Object.entries(pend).sort((a,b)=>b[1].v-a[1].v);
   $("reembSec").hidden=!pl.length;
   if(pl.length){
@@ -247,7 +255,9 @@ function render(d){
   g.forEach(x=>{
     const dt=new Date(x.data),k=dt.toDateString();
     if(k!==last){last=k;h+=`<div class="day"><span>${dt.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"short",timeZone:TZ})}</span><span class="num money">R$ ${brl(dayTot[k])}</span></div>`}
-    h+=`<div class="tx">${icon(x.categoria)}<div class="info"><div class="d">${esc(x.descricao)}</div><div class="m">${CAT[key(x.categoria)][0]} · ${dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",timeZone:TZ})}</div>${x.pagoPor?`<span class="payer${x.reembolsado?" ok":""}">Pago por ${esc(x.pagoPor)}${x.reembolsado?" · reembolsado":" · a reembolsar"}</span>`:""}</div><div class="v num money">− R$ ${brl(Number(x.valor))}</div></div>`;
+    const tag=y=>y.pagoPor?`<span class="payer${y.reembolsado?" ok":""}">Pago por ${esc(y.pagoPor)}${y.reembolsado?" · reembolsado":" · a reembolsar"}</span>`:"";
+    const row=`${icon(x.categoria)}<div class="info"><div class="d">${esc(x.descricao)}</div><div class="m">${CAT[key(x.categoria)][0]} · ${dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",timeZone:TZ})}${x.itens?` · ${x.itens.length} itens`:""}</div>${tag(x)}</div><div class="v num money">− R$ ${brl(Number(x.valor))}</div>`;
+    h+=x.itens?`<details class="tx-wrap"><summary class="tx">${row}<svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></summary><div class="items">${x.itens.map(i=>`<div class="item"><div><div>${esc(i.descricao)}</div>${tag(i)}</div><span class="num money">R$ ${brl(Number(i.valor))}</span></div>`).join("")}</div></details>`:`<div class="tx">${row}</div>`;
   });
   $("list").innerHTML=h;
 }
