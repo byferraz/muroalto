@@ -3,23 +3,23 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
-<meta name="theme-color" content="#0b3b5c">
-<title>Caixinha Salvador</title>
+<meta name="theme-color" content="#3a1650">
+<title>Caixinha Muro Alto</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-/* Layout: coluna mobile (máx 440px) — cartão de saldo oceano, indicadores, gastos por categoria, extrato por dia */
+/* Layout: coluna mobile (máx 440px) — cartão de saldo pôr do sol, aportes do grupo, indicadores, gastos por categoria, extrato por dia */
 :root{
   --bg:#f4f6f8; --surface:#ffffff; --surface-2:#eef2f5; --fg:#0f1d2a; --muted:#6a7a89; --line:#e3e9ee;
-  --ocean-1:#0b3b5c; --ocean-2:#0e7c86; --mango:#ffb547; --coral:#ff6b5b; --leaf:#16a37b;
+  --sun-1:#3a1650; --sun-2:#b8336a; --sun-3:#ff8e5e; --pool:#2ec4b6; --sand:#ffd9a8; --accent:#c2416b;
   --c-comida:#ff8a3d; --c-transporte:#3b82f6; --c-hosp:#8b5cf6; --c-passeio:#10b5a6; --c-compras:#ec4899; --c-outros:#94a3b8;
   --font:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
   color-scheme:light;
 }
 @media (prefers-color-scheme:dark){:root{
   --bg:#081521; --surface:#0f2131; --surface-2:#15293b; --fg:#e8f0f6; --muted:#8aa0b3; --line:#1d3245;
-  --ocean-1:#0e4a70; --ocean-2:#11929d; color-scheme:dark}}
+  --accent:#ff7aa2; color-scheme:dark}}
 *{box-sizing:border-box;margin:0}
 html{-webkit-text-size-adjust:100%}
 body{background:var(--bg);color:var(--fg);font-family:var(--font);font-weight:400;font-size:15px;line-height:1.45;
@@ -27,22 +27,45 @@ body{background:var(--bg);color:var(--fg);font-family:var(--font);font-weight:40
 .app{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
 .num{font-variant-numeric:tabular-nums;letter-spacing:-.01em}
 button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
-:focus-visible{outline:2px solid var(--ocean-2);outline-offset:3px;border-radius:8px}
+:focus-visible{outline:2px solid var(--accent);outline-offset:3px;border-radius:8px}
 
 /* topo */
 .top{display:flex;align-items:center;justify-content:space-between;gap:12px}
 .hello small{display:block;font-size:.78rem;color:var(--muted)}
 .hello strong{font-weight:600;font-size:1.05rem;letter-spacing:-.01em}
 .crew{display:flex}
-.crew span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:.7rem;font-weight:600;color:#fff;border:2px solid var(--bg);margin-left:-8px}
-.crew span:first-child{margin-left:0}
+.crew{display:flex;align-items:center;gap:6px;padding:4px 4px 4px 4px;border-radius:99px}
+.crew .faces{display:flex}
+.av{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:.72rem;font-weight:600;color:#fff;border:2px solid var(--bg);margin-left:-9px;flex:none}
+.faces .av:first-child{margin-left:0}
+.av-1{background:linear-gradient(135deg,var(--sun-3),var(--sun-2))}
+.av-2{background:linear-gradient(135deg,#ff7d7a,#b8336a)}
+.av-3{background:linear-gradient(135deg,var(--sun-2),#7a2163)}
+.av-4{background:linear-gradient(135deg,#9a2a6a,var(--sun-1))}
+.av-5{background:linear-gradient(135deg,#6b2a73,#2a1240)}
+.chev{width:18px;height:18px;color:var(--muted);transition:transform .25s}
+.crew[aria-expanded="true"] .chev{transform:rotate(180deg)}
+
+/* aportes */
+.contrib{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:6px 18px 16px;margin-top:-6px}
+.contrib h3{font-size:.8rem;font-weight:500;color:var(--muted);margin:12px 0 4px}
+.person{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:12px;padding:10px 0}
+.person + .person{border-top:1px solid var(--line)}
+.person .av{margin:0;width:36px;height:36px;border:0;font-size:.8rem}
+.person .n{font-weight:500}
+.person .x{font-size:.72rem;color:var(--muted)}
+.person .bar{grid-column:2/4;height:5px;border-radius:9px;background:var(--surface-2);overflow:hidden;margin-top:-4px}
+.person .bar i{display:block;height:100%;border-radius:9px;background:linear-gradient(90deg,var(--sun-3),var(--sun-2))}
+.person .v{font-weight:500}
+.sum{display:flex;justify-content:space-between;font-size:.8rem;color:var(--muted);padding-top:12px;border-top:1px dashed var(--line);margin-top:4px}
+.sum + .sum{border:0;padding-top:4px;color:var(--fg);font-weight:600}
 
 /* cartão */
 .card{position:relative;overflow:hidden;border-radius:26px;padding:24px 22px 22px;color:#fff;
-  background:radial-gradient(120% 90% at 100% 0%,rgba(255,181,71,.38) 0%,transparent 55%),
-             radial-gradient(90% 80% at 0% 100%,rgba(22,163,123,.35) 0%,transparent 60%),
-             linear-gradient(150deg,var(--ocean-1),var(--ocean-2));
-  box-shadow:0 20px 40px -22px rgba(11,59,92,.8)}
+  background:radial-gradient(110% 80% at 100% 0%,rgba(255,217,168,.45) 0%,transparent 55%),
+             radial-gradient(80% 70% at 0% 100%,rgba(46,196,182,.28) 0%,transparent 60%),
+             linear-gradient(155deg,var(--sun-1) 0%,var(--sun-2) 58%,var(--sun-3) 100%);
+  box-shadow:0 20px 40px -22px rgba(120,30,80,.75)}
 .card::after{content:"";position:absolute;right:-60px;bottom:-70px;width:220px;height:220px;border-radius:50%;border:1px solid rgba(255,255,255,.14);
   box-shadow:0 0 0 28px rgba(255,255,255,.04),0 0 0 56px rgba(255,255,255,.03)}
 .card-head{display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:rgba(255,255,255,.78)}
@@ -52,7 +75,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .balance .cur{font-size:1.1rem;font-weight:400;opacity:.8;margin-right:4px;vertical-align:.7em}
 .of{font-size:.82rem;color:rgba(255,255,255,.75)}
 .track{margin-top:20px;height:8px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden}
-.track i{display:block;height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,var(--mango),#ffe08a);transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.track i{display:block;height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,var(--pool),#b8f3ea);transition:width .6s cubic-bezier(.2,.8,.2,1)}
 .track-legend{display:flex;justify-content:space-between;margin-top:8px;font-size:.75rem;color:rgba(255,255,255,.78)}
 .hide .money{filter:blur(9px);user-select:none}
 
@@ -86,19 +109,24 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .tx .m{font-size:.75rem;color:var(--muted)}
 .tx .v{font-weight:500;white-space:nowrap}
 .empty{text-align:center;padding:26px 8px 10px;color:var(--muted);font-size:.88rem}
-.empty .ic{margin:0 auto 12px;background:var(--surface-2);color:var(--ocean-2)}
-.foot{text-align:center;font-size:.72rem;color:var(--muted)}
+.empty .ic{margin:0 auto 12px;background:var(--surface-2);color:var(--accent)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
 <body>
 <main class="app" id="app">
   <header class="top">
-    <div class="hello"><small>Viagem a Salvador</small><strong>Caixinha do grupo</strong></div>
-    <div class="crew" aria-label="Integrantes">
-      <span style="background:#e0703a" title="Laís">L</span><span style="background:#4a8f5b" title="Vanessa">V</span><span style="background:#2f7f86" title="Kelly">K</span><span style="background:#b0844a" title="Sthevan">S</span><span style="background:#5a6578" title="Carlos">C</span>
-    </div>
+    <div class="hello"><small>Viagem a Muro Alto</small><strong>Caixinha do grupo</strong></div>
+    <button class="crew" id="crew" aria-expanded="false" aria-controls="contrib" aria-label="Ver quanto cada um aportou">
+      <span class="faces" id="faces"></span>
+      <svg class="chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg>
+    </button>
   </header>
+
+  <section class="contrib" id="contrib" hidden aria-label="Aportes do grupo">
+    <h3>Quanto cada um aportou</h3>
+    <div id="people"></div>
+  </section>
 
   <section class="card" id="card" aria-label="Saldo">
     <div class="card-head"><span>Saldo disponível</span>
@@ -127,7 +155,6 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     <div id="list"><div class="empty">Carregando…</div></div>
   </section>
 
-  <p class="foot">Os gastos são lançados pelo tesoureiro. A página se atualiza sozinha.</p>
 </main>
 
 <script>
@@ -152,7 +179,18 @@ try{if(localStorage.getItem("hide")==="1")toggle(true)}catch(e){}
 $("eye").onclick=()=>toggle(!$("card").classList.contains("hide"));
 function toggle(h){[$("card"),$("app")].forEach(el=>el.classList.toggle("hide",h));$("eye").setAttribute("aria-pressed",h);try{localStorage.setItem("hide",h?"1":"0")}catch(e){}}
 
+$("crew").onclick=()=>{const o=$("crew").getAttribute("aria-expanded")!=="true";$("crew").setAttribute("aria-expanded",o);$("contrib").hidden=!o};
+function people(list,d){
+  $("faces").innerHTML=list.map((p,i)=>`<span class="av av-${i+1}">${esc(p.inicial)}</span>`).join("");
+  const max=Math.max(...list.map(p=>p.aportou),1), tot=list.reduce((s,p)=>s+p.aportou,0);
+  $("people").innerHTML=list.map((p,i)=>`<div class="person"><span class="av av-${i+1}">${esc(p.inicial)}</span>
+    <div><div class="n">${esc(p.nome)}</div><div class="x">${esc(p.detalhe||"")}</div></div><div class="v num money">R$ ${brl(p.aportou)}</div>
+    <div class="bar"><i style="width:${p.aportou/max*100}%"></i></div></div>`).join("")+
+    `<div class="sum"><span>Total aportado pelo grupo</span><span class="num money">R$ ${brl(tot)}</span></div>`+
+    (d.rendimento?`<div class="sum"><span>+ rendimento</span><span class="num money">R$ ${brl(Number(d.rendimento))}</span></div>`:"");
+}
 function render(d){
+  if(d.integrantes&&d.integrantes.length)people(d.integrantes.slice().sort((a,b)=>b.aportou-a.aportou),d);
   const g=(d.gastos||[]).slice().sort((a,b)=>new Date(b.data)-new Date(a.data));
   const ini=Number(d.saldoInicial)||0, tot=g.reduce((s,x)=>s+Number(x.valor||0),0), saldo=ini-tot;
   $("saldo").innerHTML=`<span class="cur">R$</span>${brl(saldo)}`;

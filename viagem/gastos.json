@@ -1,5 +1,13 @@
 {
   "saldoInicial": 2339.09,
+  "rendimento": 229.09,
   "atualizado": "2026-11-13T14:00:00-03:00",
+  "integrantes": [
+    { "nome": "Sthevan", "inicial": "S", "aportou": 700, "detalhe": "R$ 570 em mensalidades + R$ 130 de aporte extra" },
+    { "nome": "Carlos",  "inicial": "C", "aportou": 450, "detalhe": "15 mensalidades" },
+    { "nome": "Vanessa", "inicial": "V", "aportou": 420, "detalhe": "14 mensalidades" },
+    { "nome": "Kelly",   "inicial": "K", "aportou": 390, "detalhe": "13 mensalidades" },
+    { "nome": "Laís",    "inicial": "L", "aportou": 150, "detalhe": "5 mensalidades" }
+  ],
   "gastos": []
 }
