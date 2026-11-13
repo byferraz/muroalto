@@ -1,7 +1,7 @@
 {
   "saldoInicial": 2339.09,
   "rendimento": 229.09,
-  "atualizado": "2026-11-13T17:00:25-03:00",
+  "atualizado": "2026-11-13T17:01:54-03:00",
   "integrantes": [
     {
       "nome": "Sthevan",
@@ -87,12 +87,6 @@
     },
     {
       "descricao": "Café da manhã · dia 1",
-      "valor": 170,
-      "categoria": "comida",
-      "data": "2026-11-13T14:48:55-03:00"
-    },
-    {
-      "descricao": "Café da manhã · dia 2",
       "valor": 170,
       "categoria": "comida",
       "data": "2026-11-13T14:48:55-03:00"
