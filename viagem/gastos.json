@@ -1,7 +1,7 @@
 {
   "saldoInicial": 2339.09,
   "rendimento": 229.09,
-  "atualizado": "2026-11-13T14:32:03-03:00",
+  "atualizado": "2026-11-13T14:39:24-03:00",
   "integrantes": [
     {
       "nome": "Sthevan",
@@ -40,6 +40,18 @@
       "valor": 263.22,
       "categoria": "transporte",
       "data": "2026-11-13T14:32:03-03:00"
+    },
+    {
+      "descricao": "Bebidas",
+      "valor": 305,
+      "categoria": "comida",
+      "data": "2026-11-13T14:39:24-03:00"
+    },
+    {
+      "descricao": "Conveniência",
+      "valor": 75,
+      "categoria": "compras",
+      "data": "2026-11-13T14:39:24-03:00"
     }
   ]
 }
