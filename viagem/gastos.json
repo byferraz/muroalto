@@ -1,7 +1,7 @@
 {
   "saldoInicial": 2339.09,
   "rendimento": 229.09,
-  "atualizado": "2026-11-13T14:42:10-03:00",
+  "atualizado": "2026-11-13T14:44:33-03:00",
   "integrantes": [
     {
       "nome": "Sthevan",
@@ -78,6 +78,12 @@
       "data": "2026-11-13T14:42:10-03:00",
       "pagoPor": "Carlos",
       "reembolsado": false
+    },
+    {
+      "descricao": "Limpeza do flat",
+      "valor": 240,
+      "categoria": "hospedagem",
+      "data": "2026-11-13T14:44:33-03:00"
     }
   ]
 }
