@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b3b5c">
+<title>Caixinha Salvador</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+/* Layout: coluna mobile (máx 440px) — cartão de saldo oceano, indicadores, gastos por categoria, extrato por dia */
+:root{
+  --bg:#f4f6f8; --surface:#ffffff; --surface-2:#eef2f5; --fg:#0f1d2a; --muted:#6a7a89; --line:#e3e9ee;
+  --ocean-1:#0b3b5c; --ocean-2:#0e7c86; --mango:#ffb547; --coral:#ff6b5b; --leaf:#16a37b;
+  --c-comida:#ff8a3d; --c-transporte:#3b82f6; --c-hosp:#8b5cf6; --c-passeio:#10b5a6; --c-compras:#ec4899; --c-outros:#94a3b8;
+  --font:'Plus Jakarta Sans',system-ui,-apple-system,'Segoe UI',sans-serif;
+  color-scheme:light;
+}
+@media (prefers-color-scheme:dark){:root{
+  --bg:#081521; --surface:#0f2131; --surface-2:#15293b; --fg:#e8f0f6; --muted:#8aa0b3; --line:#1d3245;
+  --ocean-1:#0e4a70; --ocean-2:#11929d; color-scheme:dark}}
+*{box-sizing:border-box;margin:0}
+html{-webkit-text-size-adjust:100%}
+body{background:var(--bg);color:var(--fg);font-family:var(--font);font-weight:400;font-size:15px;line-height:1.45;
+  padding:max(16px,env(safe-area-inset-top)) max(16px,env(safe-area-inset-right)) max(32px,env(safe-area-inset-bottom)) max(16px,env(safe-area-inset-left))}
+.app{max-width:440px;margin:0 auto;display:flex;flex-direction:column;gap:20px}
+.num{font-variant-numeric:tabular-nums;letter-spacing:-.01em}
+button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
+:focus-visible{outline:2px solid var(--ocean-2);outline-offset:3px;border-radius:8px}
+
+/* topo */
+.top{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.hello small{display:block;font-size:.78rem;color:var(--muted)}
+.hello strong{font-weight:600;font-size:1.05rem;letter-spacing:-.01em}
+.crew{display:flex}
+.crew span{width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:.7rem;font-weight:600;color:#fff;border:2px solid var(--bg);margin-left:-8px}
+.crew span:first-child{margin-left:0}
+
+/* cartão */
+.card{position:relative;overflow:hidden;border-radius:26px;padding:24px 22px 22px;color:#fff;
+  background:radial-gradient(120% 90% at 100% 0%,rgba(255,181,71,.38) 0%,transparent 55%),
+             radial-gradient(90% 80% at 0% 100%,rgba(22,163,123,.35) 0%,transparent 60%),
+             linear-gradient(150deg,var(--ocean-1),var(--ocean-2));
+  box-shadow:0 20px 40px -22px rgba(11,59,92,.8)}
+.card::after{content:"";position:absolute;right:-60px;bottom:-70px;width:220px;height:220px;border-radius:50%;border:1px solid rgba(255,255,255,.14);
+  box-shadow:0 0 0 28px rgba(255,255,255,.04),0 0 0 56px rgba(255,255,255,.03)}
+.card-head{display:flex;justify-content:space-between;align-items:center;font-size:.8rem;color:rgba(255,255,255,.78)}
+.eye{display:grid;place-items:center;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.12)}
+.eye svg{width:18px;height:18px}
+.balance{font-size:2.6rem;font-weight:300;letter-spacing:-.03em;margin:10px 0 2px;line-height:1.05}
+.balance .cur{font-size:1.1rem;font-weight:400;opacity:.8;margin-right:4px;vertical-align:.7em}
+.of{font-size:.82rem;color:rgba(255,255,255,.75)}
+.track{margin-top:20px;height:8px;border-radius:99px;background:rgba(255,255,255,.18);overflow:hidden}
+.track i{display:block;height:100%;width:100%;border-radius:99px;background:linear-gradient(90deg,var(--mango),#ffe08a);transition:width .6s cubic-bezier(.2,.8,.2,1)}
+.track-legend{display:flex;justify-content:space-between;margin-top:8px;font-size:.75rem;color:rgba(255,255,255,.78)}
+.hide .money{filter:blur(9px);user-select:none}
+
+/* indicadores */
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 12px;display:flex;flex-direction:column;gap:4px;min-width:0}
+.stat small{font-size:.7rem;color:var(--muted)}
+.stat b{font-weight:600;font-size:1rem;overflow-wrap:anywhere}
+
+/* secções */
+.section{background:var(--surface);border:1px solid var(--line);border-radius:22px;padding:18px}
+.section h2{font-size:.95rem;font-weight:600;letter-spacing:-.01em;display:flex;justify-content:space-between;align-items:baseline}
+.section h2 span{font-size:.75rem;font-weight:400;color:var(--muted)}
+.stack{display:flex;height:12px;border-radius:99px;overflow:hidden;background:var(--surface-2);margin:14px 0 12px;gap:2px}
+.stack i{display:block;height:100%}
+.legend{display:grid;grid-template-columns:1fr 1fr;gap:8px 14px}
+.legend div{display:flex;align-items:center;gap:8px;font-size:.8rem;min-width:0}
+.legend em{width:8px;height:8px;border-radius:50%;flex:none}
+.legend span{flex:1;color:var(--muted);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.legend b{font-weight:500}
+
+/* extrato */
+.day{display:flex;justify-content:space-between;font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin:16px 0 4px}
+.day:first-of-type{margin-top:10px}
+.tx{display:flex;align-items:center;gap:12px;padding:10px 0}
+.tx + .tx{border-top:1px solid var(--line)}
+.ic{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;flex:none}
+.ic svg{width:20px;height:20px}
+.tx .info{flex:1;min-width:0}
+.tx .d{font-weight:500;overflow-wrap:anywhere}
+.tx .m{font-size:.75rem;color:var(--muted)}
+.tx .v{font-weight:500;white-space:nowrap}
+.empty{text-align:center;padding:26px 8px 10px;color:var(--muted);font-size:.88rem}
+.empty .ic{margin:0 auto 12px;background:var(--surface-2);color:var(--ocean-2)}
+.foot{text-align:center;font-size:.72rem;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main class="app" id="app">
+  <header class="top">
+    <div class="hello"><small>Viagem a Salvador</small><strong>Caixinha do grupo</strong></div>
+    <div class="crew" aria-label="Integrantes">
+      <span style="background:#e0703a" title="Laís">L</span><span style="background:#4a8f5b" title="Vanessa">V</span><span style="background:#2f7f86" title="Kelly">K</span><span style="background:#b0844a" title="Sthevan">S</span><span style="background:#5a6578" title="Carlos">C</span>
+    </div>
+  </header>
+
+  <section class="card" id="card" aria-label="Saldo">
+    <div class="card-head"><span>Saldo disponível</span>
+      <button class="eye" id="eye" aria-label="Ocultar valores" aria-pressed="false"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M2 12s3.6-7 10-7 10 7 10 7-3.6 7-10 7S2 12 2 12z"/><circle cx="12" cy="12" r="3"/></svg></button>
+    </div>
+    <div class="balance num money" id="saldo"><span class="cur">R$</span>—</div>
+    <div class="of">de <span class="money num" id="inicial">—</span> no início da viagem</div>
+    <div class="track" aria-hidden="true"><i id="fill"></i></div>
+    <div class="track-legend"><span id="pctLeft">—</span><span>gasto <b class="money num" id="gasto">—</b></span></div>
+  </section>
+
+  <section class="stats">
+    <div class="stat"><small>Gasto hoje</small><b class="num money" id="hoje">—</b></div>
+    <div class="stat"><small>Por pessoa</small><b class="num money" id="pp">—</b></div>
+    <div class="stat"><small>Lançamentos</small><b class="num" id="qtd">—</b></div>
+  </section>
+
+  <section class="section" id="catSec" hidden>
+    <h2>Para onde foi o dinheiro <span id="catTotal"></span></h2>
+    <div class="stack" id="stack"></div>
+    <div class="legend" id="legend"></div>
+  </section>
+
+  <section class="section">
+    <h2>Extrato <span id="upd"></span></h2>
+    <div id="list"><div class="empty">Carregando…</div></div>
+  </section>
+
+  <p class="foot">Os gastos são lançados pelo tesoureiro. A página se atualiza sozinha.</p>
+</main>
+
+<script>
+const IC={
+ comida:'<path d="M5 3v8a3 3 0 0 0 6 0V3M8 3v18M17 3c-1.7 0-3 2.2-3 5s1.3 4 3 4v9"/>',
+ transporte:'<path d="M5 17h14l-1.5-6.5A2 2 0 0 0 15.6 9H8.4a2 2 0 0 0-1.9 1.5zM3 17h18v2H3z"/><circle cx="7.5" cy="19.5" r="1.5"/><circle cx="16.5" cy="19.5" r="1.5"/>',
+ hospedagem:'<path d="M3 20V8M3 14h18v6M21 14v-2a3 3 0 0 0-3-3h-7v5"/><circle cx="7" cy="11" r="2"/>',
+ passeio:'<circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M2 12h2M20 12h2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"/>',
+ compras:'<path d="M6 7h12l-1 13H7zM9 7a3 3 0 0 1 6 0"/>',
+ outros:'<circle cx="6" cy="12" r="1.3"/><circle cx="12" cy="12" r="1.3"/><circle cx="18" cy="12" r="1.3"/>'
+};
+const CAT={comida:["Comida","--c-comida"],transporte:["Transporte","--c-transporte"],hospedagem:["Hospedagem","--c-hosp"],
+ passeio:["Passeios","--c-passeio"],compras:["Compras","--c-compras"],outros:["Outros","--c-outros"]};
+const TZ="America/Bahia";
+const $=id=>document.getElementById(id);
+const brl=v=>v.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const key=c=>CAT[c]?c:"outros";
+const icon=(c,size)=>`<span class="ic" style="background:color-mix(in srgb,var(${CAT[key(c)][1]}) 16%,transparent);color:var(${CAT[key(c)][1]})"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">${IC[key(c)]}</svg></span>`;
+
+try{if(localStorage.getItem("hide")==="1")toggle(true)}catch(e){}
+$("eye").onclick=()=>toggle(!$("card").classList.contains("hide"));
+function toggle(h){[$("card"),$("app")].forEach(el=>el.classList.toggle("hide",h));$("eye").setAttribute("aria-pressed",h);try{localStorage.setItem("hide",h?"1":"0")}catch(e){}}
+
+function render(d){
+  const g=(d.gastos||[]).slice().sort((a,b)=>new Date(b.data)-new Date(a.data));
+  const ini=Number(d.saldoInicial)||0, tot=g.reduce((s,x)=>s+Number(x.valor||0),0), saldo=ini-tot;
+  $("saldo").innerHTML=`<span class="cur">R$</span>${brl(saldo)}`;
+  $("inicial").textContent="R$ "+brl(ini);
+  $("gasto").textContent="R$ "+brl(tot);
+  const left=ini?Math.max(0,saldo/ini*100):0;
+  $("fill").style.width=left+"%"; $("pctLeft").textContent=Math.round(left)+"% restante";
+  const today=new Date().toDateString();
+  $("hoje").textContent="R$ "+brl(g.filter(x=>new Date(x.data).toDateString()===today).reduce((s,x)=>s+Number(x.valor),0));
+  $("pp").textContent="R$ "+brl(saldo/5);
+  $("qtd").textContent=g.length;
+  if(d.atualizado)$("upd").textContent="atualizado "+new Date(d.atualizado).toLocaleString("pt-BR",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit",timeZone:TZ});
+
+  // categorias
+  const by={};g.forEach(x=>by[key(x.categoria)]=(by[key(x.categoria)]||0)+Number(x.valor));
+  const cats=Object.entries(by).sort((a,b)=>b[1]-a[1]);
+  $("catSec").hidden=!cats.length;
+  if(cats.length){
+    $("catTotal").textContent="R$ "+brl(tot);
+    $("stack").innerHTML=cats.map(([c,v])=>`<i style="width:${v/tot*100}%;background:var(${CAT[c][1]})"></i>`).join("");
+    $("legend").innerHTML=cats.map(([c,v])=>`<div><em style="background:var(${CAT[c][1]})"></em><span>${CAT[c][0]}</span><b class="num money">${Math.round(v/tot*100)}%</b></div>`).join("");
+  }
+
+  // extrato
+  if(!g.length){$("list").innerHTML=`<div class="empty">${icon("passeio")}Nenhum gasto ainda.<br>Os lançamentos da viagem aparecem aqui.</div>`;return}
+  let h="",last="",dayTot={};
+  g.forEach(x=>{const k=new Date(x.data).toDateString();dayTot[k]=(dayTot[k]||0)+Number(x.valor)});
+  g.forEach(x=>{
+    const dt=new Date(x.data),k=dt.toDateString();
+    if(k!==last){last=k;h+=`<div class="day"><span>${dt.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"short",timeZone:TZ})}</span><span class="num money">R$ ${brl(dayTot[k])}</span></div>`}
+    h+=`<div class="tx">${icon(x.categoria)}<div class="info"><div class="d">${esc(x.descricao)}</div><div class="m">${CAT[key(x.categoria)][0]} · ${dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",timeZone:TZ})}</div></div><div class="v num money">− R$ ${brl(Number(x.valor))}</div></div>`;
+  });
+  $("list").innerHTML=h;
+}
+
+async function load(){
+  try{const r=await fetch("gastos.json?t="+Date.now(),{cache:"no-store"});render(await r.json())}
+  catch(e){if(!$("list").querySelector(".tx"))$("list").innerHTML='<div class="empty">Não foi possível carregar os gastos. Verifique a conexão e recarregue.</div>'}
+}
+load(); setInterval(load,60000);
+document.addEventListener("visibilitychange",()=>{if(!document.hidden)load()});
+</script>
+</body>
+</html>
