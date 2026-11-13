@@ -108,6 +108,13 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 .tx .d{font-weight:500;overflow-wrap:anywhere}
 .tx .m{font-size:.75rem;color:var(--muted)}
 .tx .v{font-weight:500;white-space:nowrap}
+.payer{display:inline-block;white-space:nowrap;font-size:.68rem;font-weight:500;padding:2px 8px;border-radius:99px;margin-top:3px;background:color-mix(in srgb,var(--sun-3) 18%,transparent);color:var(--accent)}
+.payer.ok{background:var(--surface-2);color:var(--muted)}
+.reemb{display:flex;align-items:center;gap:12px;padding:10px 0}
+.reemb + .reemb{border-top:1px solid var(--line)}
+.reemb .av{margin:0;width:34px;height:34px;border:0}
+.reemb .n{flex:1;font-weight:500}
+.reemb .n small{display:block;font-weight:400;font-size:.72rem;color:var(--muted)}
 .empty{text-align:center;padding:26px 8px 10px;color:var(--muted);font-size:.88rem}
 .empty .ic{margin:0 auto 12px;background:var(--surface-2);color:var(--accent)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
@@ -142,6 +149,11 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
     <div class="stat"><small>Gasto hoje</small><b class="num money" id="hoje">—</b></div>
     <div class="stat"><small id="ppLbl">Por dia</small><b class="num money" id="pp">—</b></div>
     <div class="stat"><small>Lançamentos</small><b class="num" id="qtd">—</b></div>
+  </section>
+
+  <section class="section" id="reembSec" hidden>
+    <h2>A reembolsar <span id="reembTotal"></span></h2>
+    <div id="reemb"></div>
   </section>
 
   <section class="section" id="catSec" hidden>
@@ -214,6 +226,14 @@ function render(d){
   const by={};g.forEach(x=>by[key(x.categoria)]=(by[key(x.categoria)]||0)+Number(x.valor));
   const cats=Object.entries(by).sort((a,b)=>b[1]-a[1]);
   $("catSec").hidden=!cats.length;
+  const pend={};g.filter(x=>x.pagoPor&&!x.reembolsado).forEach(x=>{(pend[x.pagoPor]=pend[x.pagoPor]||{v:0,n:0});pend[x.pagoPor].v+=Number(x.valor);pend[x.pagoPor].n++});
+  const pl=Object.entries(pend).sort((a,b)=>b[1].v-a[1].v);
+  $("reembSec").hidden=!pl.length;
+  if(pl.length){
+    const idx=n=>{const L=(d.integrantes||[]).slice().sort((a,b)=>b.aportou-a.aportou);const i=L.findIndex(p=>p.nome===n);return i<0?5:i+1};
+    $("reembTotal").textContent="R$ "+brl(pl.reduce((s,[,o])=>s+o.v,0));
+    $("reemb").innerHTML=pl.map(([n,o])=>`<div class="reemb"><span class="av av-${idx(n)}">${esc(n[0])}</span><div class="n">${esc(n)}<small>${o.n} ${o.n>1?"gastos pagos":"gasto pago"} do próprio bolso</small></div><b class="num money">R$ ${brl(o.v)}</b></div>`).join("");
+  }
   if(cats.length){
     $("catTotal").textContent="R$ "+brl(tot);
     $("stack").innerHTML=cats.map(([c,v])=>`<i style="width:${v/tot*100}%;background:var(${CAT[c][1]})"></i>`).join("");
@@ -227,7 +247,7 @@ function render(d){
   g.forEach(x=>{
     const dt=new Date(x.data),k=dt.toDateString();
     if(k!==last){last=k;h+=`<div class="day"><span>${dt.toLocaleDateString("pt-BR",{weekday:"long",day:"2-digit",month:"short",timeZone:TZ})}</span><span class="num money">R$ ${brl(dayTot[k])}</span></div>`}
-    h+=`<div class="tx">${icon(x.categoria)}<div class="info"><div class="d">${esc(x.descricao)}</div><div class="m">${CAT[key(x.categoria)][0]} · ${dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",timeZone:TZ})}</div></div><div class="v num money">− R$ ${brl(Number(x.valor))}</div></div>`;
+    h+=`<div class="tx">${icon(x.categoria)}<div class="info"><div class="d">${esc(x.descricao)}</div><div class="m">${CAT[key(x.categoria)][0]} · ${dt.toLocaleTimeString("pt-BR",{hour:"2-digit",minute:"2-digit",timeZone:TZ})}</div>${x.pagoPor?`<span class="payer${x.reembolsado?" ok":""}">Pago por ${esc(x.pagoPor)}${x.reembolsado?" · reembolsado":" · a reembolsar"}</span>`:""}</div><div class="v num money">− R$ ${brl(Number(x.valor))}</div></div>`;
   });
   $("list").innerHTML=h;
 }

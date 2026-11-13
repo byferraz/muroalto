@@ -1,7 +1,7 @@
 {
   "saldoInicial": 2339.09,
   "rendimento": 229.09,
-  "atualizado": "2026-11-13T14:39:24-03:00",
+  "atualizado": "2026-11-13T14:42:10-03:00",
   "integrantes": [
     {
       "nome": "Sthevan",
@@ -45,13 +45,39 @@
       "descricao": "Bebidas",
       "valor": 305,
       "categoria": "comida",
-      "data": "2026-11-13T14:39:24-03:00"
+      "data": "2026-11-13T14:39:24-03:00",
+      "pagoPor": "Carlos",
+      "reembolsado": false
     },
     {
       "descricao": "Conveniência",
       "valor": 75,
       "categoria": "compras",
       "data": "2026-11-13T14:39:24-03:00"
+    },
+    {
+      "descricao": "Monster e amendoim",
+      "valor": 20,
+      "categoria": "comida",
+      "data": "2026-11-13T14:42:10-03:00",
+      "pagoPor": "Vanessa",
+      "reembolsado": false
+    },
+    {
+      "descricao": "Água",
+      "valor": 7,
+      "categoria": "comida",
+      "data": "2026-11-13T14:42:10-03:00",
+      "pagoPor": "Kelly",
+      "reembolsado": false
+    },
+    {
+      "descricao": "Corona",
+      "valor": 48,
+      "categoria": "comida",
+      "data": "2026-11-13T14:42:10-03:00",
+      "pagoPor": "Carlos",
+      "reembolsado": false
     }
   ]
 }
