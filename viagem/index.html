@@ -140,7 +140,7 @@ button{font:inherit;color:inherit;background:none;border:0;cursor:pointer}
 
   <section class="stats">
     <div class="stat"><small>Gasto hoje</small><b class="num money" id="hoje">—</b></div>
-    <div class="stat"><small>Por pessoa</small><b class="num money" id="pp">—</b></div>
+    <div class="stat"><small id="ppLbl">Por dia</small><b class="num money" id="pp">—</b></div>
     <div class="stat"><small>Lançamentos</small><b class="num" id="qtd">—</b></div>
   </section>
 
@@ -169,6 +169,7 @@ const IC={
 const CAT={comida:["Comida","--c-comida"],transporte:["Transporte","--c-transporte"],hospedagem:["Hospedagem","--c-hosp"],
  passeio:["Passeios","--c-passeio"],compras:["Compras","--c-compras"],outros:["Outros","--c-outros"]};
 const TZ="America/Bahia";
+const VIAGEM_INI="2026-11-13", VIAGEM_FIM="2026-11-15"; // 3 dias de viagem
 const $=id=>document.getElementById(id);
 const brl=v=>v.toLocaleString("pt-BR",{minimumFractionDigits:2,maximumFractionDigits:2});
 const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
@@ -200,7 +201,12 @@ function render(d){
   $("fill").style.width=left+"%"; $("pctLeft").textContent=Math.round(left)+"% restante";
   const today=new Date().toDateString();
   $("hoje").textContent="R$ "+brl(g.filter(x=>new Date(x.data).toDateString()===today).reduce((s,x)=>s+Number(x.valor),0));
-  $("pp").textContent="R$ "+brl(saldo/5);
+  // saldo disponível dividido pelos dias que faltam (contando hoje)
+  const hojeISO=new Date().toLocaleDateString("en-CA",{timeZone:TZ});
+  const dia=x=>Date.UTC(+x.slice(0,4),+x.slice(5,7)-1,+x.slice(8,10))/864e5;
+  const dias=Math.max(1,Math.min(dia(VIAGEM_FIM)-dia(VIAGEM_INI)+1,dia(VIAGEM_FIM)-Math.max(dia(hojeISO),dia(VIAGEM_INI))+1));
+  $("pp").textContent="R$ "+brl(saldo/dias);
+  $("ppLbl").textContent="Por dia · "+dias+(dias===1?" dia":" dias");
   $("qtd").textContent=g.length;
   if(d.atualizado)$("upd").textContent="atualizado "+new Date(d.atualizado).toLocaleString("pt-BR",{day:"2-digit",month:"short",hour:"2-digit",minute:"2-digit",timeZone:TZ});
 
