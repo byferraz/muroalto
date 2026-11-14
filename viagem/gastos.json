@@ -1,7 +1,7 @@
 {
   "saldoInicial": 2339.09,
   "rendimento": 229.09,
-  "atualizado": "2026-11-14T14:18:26-03:00",
+  "atualizado": "2026-11-14T14:25:57-03:00",
   "integrantes": [
     {
       "nome": "Sthevan",
@@ -129,6 +129,22 @@
       "categoria": "comida",
       "data": "2026-11-14T14:18:26-03:00",
       "pagoPor": "Kelly",
+      "reembolsado": false
+    },
+    {
+      "descricao": "Uber Maracaípe",
+      "valor": 21,
+      "categoria": "transporte",
+      "data": "2026-11-14T14:25:57-03:00",
+      "pagoPor": "Carlos",
+      "reembolsado": false
+    },
+    {
+      "descricao": "Uber Maracaípe",
+      "valor": 24.94,
+      "categoria": "transporte",
+      "data": "2026-11-14T14:25:57-03:00",
+      "pagoPor": "Laís",
       "reembolsado": false
     }
   ]
