@@ -1,7 +1,7 @@
 {
   "saldoInicial": 2339.09,
   "rendimento": 229.09,
-  "atualizado": "2026-11-14T14:25:57-03:00",
+  "atualizado": "2026-11-14T15:25:42-03:00",
   "integrantes": [
     {
       "nome": "Sthevan",
@@ -146,6 +146,12 @@
       "data": "2026-11-14T14:25:57-03:00",
       "pagoPor": "Laís",
       "reembolsado": false
+    },
+    {
+      "descricao": "Peixe em Maracaípe",
+      "valor": 210,
+      "categoria": "comida",
+      "data": "2026-11-14T15:25:42-03:00"
     }
   ]
 }
