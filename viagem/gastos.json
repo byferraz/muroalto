@@ -1,7 +1,7 @@
 {
   "saldoInicial": 2339.09,
   "rendimento": 229.09,
-  "atualizado": "2026-11-13T19:54:16-03:00",
+  "atualizado": "2026-11-14T09:27:30-03:00",
   "integrantes": [
     {
       "nome": "Sthevan",
@@ -114,6 +114,12 @@
       "data": "2026-11-13T19:54:16-03:00",
       "pagoPor": "Kelly",
       "reembolsado": false
+    },
+    {
+      "descricao": "Nescau",
+      "valor": 11,
+      "categoria": "compras",
+      "data": "2026-11-14T09:27:30-03:00"
     }
   ]
 }
